@@ -2,7 +2,7 @@ import requests
 import time
 
 ASTROMETRY_API_URL = "http://nova.astrometry.net/api/"
-API_KEY = "spvcbofjfgfjwvk"  # Replace if needed
+API_KEY = "spvcbofjfgfjwvk"  # Replace with your own key if needed
 
 def submit_astrometry_job(image_bytes):
     # Step 1: Login
@@ -22,7 +22,7 @@ def submit_astrometry_job(image_bytes):
     if not sub_id:
         return {"status": "error", "message": "Upload failed"}
 
-    # Step 3: Wait for job to be assigned to submission
+    # Step 3: Wait for job ID
     job_id = None
     for _ in range(30):
         time.sleep(3)
@@ -45,26 +45,24 @@ def submit_astrometry_job(image_bytes):
     else:
         return {"status": "error", "message": "Job timeout"}
 
-    # Step 5: Fetch annotations (with constellation lines)
+    # Step 5: Get constellation annotations
     annot_resp = requests.get(ASTROMETRY_API_URL + f"annotations/{job_id}").json()
 
-    # Optional: extract lines or star positions from annotation
-    constellations = annot_resp.get("constellations", [])
     lines = []
+    constellations = annot_resp.get("constellations", [])
     for con in constellations:
+        name = con.get("name", "Unknown")
         for line in con.get("lines", []):
-            # Each line has two points: [ [x1, y1], [x2, y2] ]
-            x1, y1 = line[0]
-            x2, y2 = line[1]
+            (x1, y1), (x2, y2) = line
             lines.append({
                 "x1": x1,
                 "y1": y1,
                 "x2": x2,
-                "y2": y2
+                "y2": y2,
+                "name": name
             })
 
     return {
         "status": "success",
-        "job_id": job_id,
         "constellation_lines": lines
     }

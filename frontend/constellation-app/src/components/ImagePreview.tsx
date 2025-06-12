@@ -10,6 +10,7 @@ interface Line {
   y1: number;
   x2: number;
   y2: number;
+  name?: string;
 }
 
 interface Props {
@@ -69,20 +70,42 @@ const ImagePreview = ({ image, setImage, stars, lines }: Props) => {
       {naturalSize.width > 1 && (stars.length > 0 || lines.length > 0) && (
         <div className="absolute inset-0 pointer-events-none">
           <svg className="absolute w-full h-full">
-            {/* Constellation lines */}
-            {lines.map((line, idx) => (
-              <line
-                key={idx}
-                x1={scaleX(line.x1)}
-                y1={scaleY(line.y1)}
-                x2={scaleX(line.x2)}
-                y2={scaleY(line.y2)}
-                stroke="cyan"
-                strokeWidth="1.5"
-              />
-            ))}
+            {/* Lines with labels */}
+            {lines.map((line, idx) => {
+              const x1 = scaleX(line.x1);
+              const y1 = scaleY(line.y1);
+              const x2 = scaleX(line.x2);
+              const y2 = scaleY(line.y2);
 
-            {/* Stars */}
+              const midX = (x1 + x2) / 2;
+              const midY = (y1 + y2) / 2;
+
+              return (
+                <g key={idx}>
+                  <line
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    stroke="cyan"
+                    strokeWidth="1.5"
+                  />
+                  {line.name && (
+                    <text
+                      x={midX}
+                      y={midY - 5}
+                      fill="white"
+                      fontSize="10"
+                      textAnchor="middle"
+                    >
+                      {line.name}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+
+            {/* Star points */}
             {stars.map((star, index) => (
               <circle
                 key={index}
