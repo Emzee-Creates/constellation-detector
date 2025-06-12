@@ -1,0 +1,46 @@
+# === Node (React/TypeScript) ===
+node_modules/
+dist/
+build/
+.env
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.pnpm-debug.log
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.env/
+.venv/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+*.log
+
+# === Common ===
+.DS_Store
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+
+# === IDE Files ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# === OS-specific ===
+Thumbs.db
+ehthumbs.db
+Desktop.ini
